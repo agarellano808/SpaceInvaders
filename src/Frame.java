@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
 
 public class Frame extends JFrame {
-	private Player p;
+
 	public Frame() {
 		add(new Board());
 		setTitle("Space Invaders");

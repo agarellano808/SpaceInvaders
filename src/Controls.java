@@ -1,4 +1,3 @@
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -17,6 +16,7 @@ public class Controls extends KeyAdapter{
 		int x= player.getX();
 		int y = player.getY();
 		int key = e.getKeyCode();
-			}
+		
+	}
 
 }
