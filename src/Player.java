@@ -7,7 +7,7 @@ public class Player extends Sprite{
 	private Missile missile;
 	public Player() {
 		missile=new Missile();
-		ImageIcon playerIcon=new ImageIcon("C:/Users/Owner/workspace/SpaceInvaders/src/Earth Space Fighter.png");
+		ImageIcon playerIcon=new ImageIcon(System.getProperty("user.dir")+"/src/Earth Space Fighter.png");
 		width = playerIcon.getImage().getWidth(null);
 		height = playerIcon.getImage().getHeight(null);
 		setImage(playerIcon.getImage());
@@ -17,12 +17,12 @@ public class Player extends Sprite{
 	
 	public void move() {
 		x+=dx;
-		if (x<=2) {
-			x=2;
+		if (x<=15) {
+			x=15;
 		}
 		
-		if(x>=640-width) {
-			x=640-width;
+		if(x>=640-width-15) {
+			x=640-width-15;
 		}
 		
 	}
