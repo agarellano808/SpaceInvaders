@@ -1,22 +1,16 @@
 import javax.swing.ImageIcon;
 
 public class Missile extends Sprite{
-	private int x;
-	private int y;
+	
+	public Missile() {
+		setVisible(false);
+	}
+	
 	public Missile(int x,int y) {
-		ImageIcon missleIcon=new ImageIcon("C:/Users/Owner/workspace/SpaceInvaders/src/Earth Space Fighter.png");
+		ImageIcon missleIcon=new ImageIcon("C:/Users/Owner/workspace/SpaceInvaders/src/Missile.png");
+		setVisible(false);
 		setImage(missleIcon.getImage());
-		this.x=x;
-		this.y=y;
+		setX(x);
+		setY(y);
 	}
-	
-	public void shootDown() {
-		setX(x+6);
-		setY(y-1);
-	}
-	
-	public void shootUp() {
-		
-	}
-	
 }
