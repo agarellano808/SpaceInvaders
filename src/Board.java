@@ -129,8 +129,8 @@ public class Board extends JPanel implements ActionListener {
 
 				if (alien.isVisible() && player.getMissile().isVisible()) {
 
-					if (missileX >= (alienX) && missileX <= (alienX + alien.getImage().getWidth(null))
-							&& missileY >= (alienY) && missileY <= (alienY + alien.getImage().getHeight(null))) {
+					if (missileX >= (alienX+2) && missileX <= (alienX + alien.getImage().getWidth(null)-2)
+							&& missileY >= (alienY) && missileY <= (alienY + alien.getImage().getHeight(null)-15)) {
 						alien.setDead(true);
 						remainingAliens--;
 						player.getMissile().die();
