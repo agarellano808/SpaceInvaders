@@ -42,6 +42,7 @@ public class ButtonPanel extends JPanel {
 				jf.setHgap(0);
 				jf.setSize(640,480);
 				jf.changePanel(""+2);
+				jf.setFocus();
 				
 			}
 		});
