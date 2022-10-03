@@ -25,7 +25,7 @@ public class Board extends JPanel implements ActionListener {
 		addKeyListener(new Controls(player));
 		timer = new Timer(16, this);
 		timer.start();
-		setFocusable(true);
+		
 
 		aliens = new ArrayList<>();
 		for (int i = 0; i < 4; i++) {
