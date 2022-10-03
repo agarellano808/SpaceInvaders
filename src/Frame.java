@@ -24,6 +24,10 @@ public class Frame extends JFrame {
 		
 		pack();
 	}
+	
+	public void setFocus() {
+		board.requestFocus(true);
+	}
 	public void initializeHighscorescreen() {
 		s.init();
 	}
