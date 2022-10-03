@@ -21,8 +21,11 @@ public class Frame extends JFrame {
 		getContentPane().add(board, "2");
 	    s = new HighScoreScreen();
 		getContentPane().add(s, "3");
-		s.init();
+		
 		pack();
+	}
+	public void initializeHighscorescreen() {
+		s.init();
 	}
 
 	public void changePanel(String s) {
@@ -30,10 +33,10 @@ public class Frame extends JFrame {
 	}
 
 	public void setVgap(int i) {
-		cl.setVgap(0);
+		cl.setVgap(i);
 	}
 
 	public void setHgap(int i) {
-		cl.setHgap(0);
+		cl.setHgap(i);
 	}
 }
