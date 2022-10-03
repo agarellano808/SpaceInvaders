@@ -48,6 +48,7 @@ public class ButtonPanel extends JPanel {
 		highScoreButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				jf.changePanel(""+3);
+				jf.initializeHighscorescreen();
 			}
 		});
 		
