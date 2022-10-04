@@ -27,9 +27,6 @@ public class Frame extends JFrame {
 	public void setFocus() {
 		board.requestFocus(true);
 	}
-	public void initializeHighscorescreen() {
-		s.init();
-	}
 
 	public void changePanel(String s) {
 		cl.show(getContentPane(), s);
