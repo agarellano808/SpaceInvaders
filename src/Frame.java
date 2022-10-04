@@ -16,7 +16,6 @@ public class Frame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		buttonPanel = new ButtonPanel();
 		getContentPane().add(buttonPanel, "1");
-		buttonPanel.init();
 		board=new Board();
 		getContentPane().add(board, "2");
 	    s = new HighScoreScreen();
