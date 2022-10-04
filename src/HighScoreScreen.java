@@ -7,32 +7,36 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 public class HighScoreScreen extends JPanel {
 	private JButton J;
 	private String playerInitials[];
 	private String highScores[];
+	private Frame frame;
+	private AncestorListener ancestorListener;
 
 	public HighScoreScreen() {
 		setLayout(new BorderLayout());
+		addButtons();
+		addButtonActionListeners();
+		setAncestorListener();
+	}
+
+	public void addButtons() {
 		J = new JButton("Back");
 		J.setAlignmentX(CENTER_ALIGNMENT);
 		add(J, BorderLayout.SOUTH);
 	}
 
-	public void init() {
-		Frame Jf = (Frame) SwingUtilities.getWindowAncestor(this);
-		Jf.setHgap(0);
-		Jf.setVgap(0);
-		Jf.setSize(640, 480);
-		
+	private void addButtonActionListeners() {
 		J.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				Jf.changePanel("1");
-				Jf.setHgap(100);
-				Jf.setVgap(160);
-				Jf.pack();
+				frame.changePanel("1");
+				frame.setHgap(100);
+				frame.setVgap(160);
+				frame.pack();
 			}
 		});
 	}
@@ -44,6 +48,36 @@ public class HighScoreScreen extends JPanel {
 			playerInitials[i] = "AAA";
 			highScores[i] = "00000000";
 		}
+	}
+
+	private void setAncestor() {
+		frame = (Frame) SwingUtilities.getWindowAncestor(this);
+	}
+
+	private void setAncestorListener() {
+		ancestorListener = new AncestorListener() {
+
+			@Override
+
+			public void ancestorAdded(AncestorEvent ancestorEvent) {
+				setAncestor();
+				frame.setHgap(0);
+				frame.setVgap(0);
+				frame.setSize(640, 480);
+			}
+
+			@Override
+			// This method is not being used and has been left intentionally blank
+			public void ancestorMoved(AncestorEvent ancestorEvent) {
+			}
+
+			@Override
+			// This method is not being used and has been left intentionally blank
+			public void ancestorRemoved(AncestorEvent ancestorEvent) {
+			}
+
+		};
+		addAncestorListener(ancestorListener);
 	}
 
 	@Override
