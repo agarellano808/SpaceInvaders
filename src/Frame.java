@@ -13,17 +13,19 @@ public class Frame extends JFrame {
 		setLayout(cl);
 		setSize(640, 480);
 		setResizable(false);
+		addPanels();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		pack();
+	}
+	
+	private void addPanels() {
 		buttonPanel = new ButtonPanel();
 		getContentPane().add(buttonPanel, "1");
 		board=new Board();
 		getContentPane().add(board, "2");
 	    s = new HighScoreScreen();
 		getContentPane().add(s, "3");
-		
-		pack();
 	}
-	
 	public void setFocus() {
 		board.requestFocus(true);
 	}
