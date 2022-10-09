@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -12,16 +13,19 @@ import javax.swing.event.AncestorListener;
 
 public class HighScoreScreen extends JPanel {
 	private JButton J;
+	private DatabaseManager d;
 	private String playerInitials[];
 	private String highScores[];
 	private Frame frame;
 	private AncestorListener ancestorListener;
 
-	public HighScoreScreen() {
+	public HighScoreScreen() throws SQLException {
 		setLayout(new BorderLayout());
 		addButtons();
 		addButtonActionListeners();
 		setAncestorListener();
+		d =new DatabaseManager();
+		initalizeHighScores();
 	}
 
 	public void addButtons() {
@@ -41,12 +45,12 @@ public class HighScoreScreen extends JPanel {
 		});
 	}
 
-	public void initalizeHighScores() {
+	public void initalizeHighScores() throws SQLException {
 		playerInitials = new String[10];
 		highScores = new String[10];
 		for (int i = 0; i < 10; i++) {
-			playerInitials[i] = "AAA";
-			highScores[i] = "00000000";
+			playerInitials[i] = d.getInitials(i+1);
+			highScores[i] =  Integer.toString(d.getScore(i+1));
 		}
 	}
 
@@ -83,14 +87,23 @@ public class HighScoreScreen extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		draw(g);
+	
+		
+		try {
+			
+			draw(g);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setBackground(Color.black);
 	}
 
-	public void draw(Graphics g) {
+	public void draw(Graphics g) throws SQLException {
+		
 		for (int i = 0; i < 10; i++) {
 			g.setColor(Color.white);
-			initalizeHighScores();
+			
 			g.drawString(playerInitials[i], 280, 50 + (30 * (i + 1)));
 			g.drawString(highScores[i], 330, 50 + (30 * (i + 1)));
 

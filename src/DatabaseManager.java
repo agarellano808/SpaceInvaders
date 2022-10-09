@@ -10,7 +10,6 @@ public class DatabaseManager {
 			stmt =con.createStatement();
 			createDatabase();
 			createTable();
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -66,11 +65,17 @@ public class DatabaseManager {
 		}
 	
 	}
-	public String getInitials() {
-		return "";
+	public String getInitials(int position) throws SQLException {
+		System.out.println(position);
+		ResultSet  rs = stmt.executeQuery("SELECT Initials FROM highscores "+"WHERE Position="+position);
+		rs.next();
+		return rs.getString("Initials");
+	
 	}
-	public String getScore() {
-		return "";
+	public int getScore(int position) throws SQLException{
+		ResultSet  rs = stmt.executeQuery("SELECT Score FROM highscores WHERE Position="+position);
+		rs.next();
+		return rs.getInt("Score");
 	}
 	
 	public void reset() throws SQLException {
@@ -85,7 +90,9 @@ public class DatabaseManager {
 		insert(9,"'III'",400);
 		insert(10,"'JJJ'",200);
 	}
-public static void main(String args[]) {
-	DatabaseManager d= new DatabaseManager();
-}
+	
+	public void closeConnection() throws SQLException  {
+		con.close();
+	}
+
 }

@@ -1,4 +1,6 @@
 import java.awt.CardLayout;
+import java.sql.SQLException;
+
 import javax.swing.JFrame;
 
 public class Frame extends JFrame {
@@ -6,7 +8,7 @@ public class Frame extends JFrame {
 	private CardLayout cl;
 	private HighScoreScreen s;
 	private Board board;
-	public Frame() {
+	public Frame() throws SQLException {
 
 		setTitle("Space Invaders");
 		cl = new CardLayout(100, 160);
@@ -18,7 +20,7 @@ public class Frame extends JFrame {
 		pack();
 	}
 	
-	private void addPanels() {
+	private void addPanels() throws SQLException {
 		buttonPanel = new ButtonPanel();
 		getContentPane().add(buttonPanel, "1");
 		board=new Board();
