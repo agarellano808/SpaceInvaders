@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -100,12 +101,15 @@ public class HighScoreScreen extends JPanel {
 	}
 
 	public void draw(Graphics g) throws SQLException {
-		
+		g.setColor(Color.white);
+		g.drawString("HIGHSCORES",285,20);
+		g.drawString("RANK",255,55);
+		g.drawString("PLAYER",300,55);
+		g.drawString("SCORE",355,55);
 		for (int i = 0; i < 10; i++) {
-			g.setColor(Color.white);
-			
-			g.drawString(playerInitials[i], 280, 50 + (30 * (i + 1)));
-			g.drawString(highScores[i], 330, 50 + (30 * (i + 1)));
+			g.drawString(Integer.toString(i),265,50+(30 * (i + 1)));
+			g.drawString(playerInitials[i], 310, 50 + (30 * (i + 1)));
+			g.drawString(highScores[i], 360, 50 + (30 * (i + 1)));
 
 		}
 	}
