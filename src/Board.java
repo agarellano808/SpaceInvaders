@@ -7,7 +7,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.Timer;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Board extends JPanel implements ActionListener {
 	private Player player;
@@ -17,16 +20,18 @@ public class Board extends JPanel implements ActionListener {
 	private boolean inGame = true;
 	private String gameEndText = "GAME OVER";
 	private int remainingAliens;
-
+	private Frame frame;
+	private AncestorListener ancestorListener;
 	public Board() {
 		setBackground(Color.black);
 		setLayout(null);
+		setAncestorListener();
+		setUpGame();
+	}
+
+	private void setUpGame() {
 		player = new Player();
 		addKeyListener(new Controls(player));
-		timer = new Timer(16, this);
-		timer.start();
-		
-
 		aliens = new ArrayList<>();
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 6; j++) {
@@ -36,7 +41,13 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
+	private void startGame() {
+		timer = new Timer(16, this);
+		timer.start();
+		
 
+	}
 	private void drawAliens(Graphics g) {
 		for (Alien alien : aliens) {
 			if (alien.isVisible()) {
@@ -199,6 +210,37 @@ public class Board extends JPanel implements ActionListener {
 		draw(g);
 	}
 
+	private void setAncestor() {
+		frame = (Frame) SwingUtilities.getWindowAncestor(this);
+	}
+
+	private void setAncestorListener() {
+		ancestorListener = new AncestorListener() {
+
+			@Override
+
+			public void ancestorAdded(AncestorEvent ancestorEvent) {
+				setAncestor();
+				startGame();
+				frame.setHgap(0);
+				frame.setVgap(0);
+				frame.setSize(640, 480);
+			}
+
+			@Override
+			// This method is not being used and has been left intentionally blank
+			public void ancestorMoved(AncestorEvent ancestorEvent) {
+			}
+
+			@Override
+			// This method is not being used and has been left intentionally blank
+			public void ancestorRemoved(AncestorEvent ancestorEvent) {
+			}
+
+		};
+		addAncestorListener(ancestorListener);
+	}
+	
 	private void draw(Graphics g) {
 		g.setColor(Color.green);
 
