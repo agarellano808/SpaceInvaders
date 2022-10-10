@@ -22,6 +22,7 @@ public class Board extends JPanel implements ActionListener {
 	private int remainingAliens;
 	private Frame frame;
 	private AncestorListener ancestorListener;
+	private int score;
 	public Board() {
 		setBackground(Color.black);
 		setLayout(null);
@@ -33,9 +34,10 @@ public class Board extends JPanel implements ActionListener {
 		player = new Player();
 		addKeyListener(new Controls(player));
 		aliens = new ArrayList<>();
+		score=0;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 6; j++) {
-				Alien alien = new Alien(120 + 60 * j, 15 + 70 * i);
+				Alien alien = new Alien(120 + 60 * j, 30 + 70 * i);
 				aliens.add(alien);
 				remainingAliens++;
 			}
@@ -46,7 +48,6 @@ public class Board extends JPanel implements ActionListener {
 		timer = new Timer(16, this);
 		timer.start();
 		
-
 	}
 	private void drawAliens(Graphics g) {
 		for (Alien alien : aliens) {
@@ -143,6 +144,7 @@ public class Board extends JPanel implements ActionListener {
 					if (missileX >= (alienX+2) && missileX <= (alienX + alien.getImage().getWidth(null)-2)
 							&& missileY >= (alienY) && missileY <= (alienY + alien.getImage().getHeight(null)-15)) {
 						alien.setDead(true);
+						score=score+100;
 						remainingAliens--;
 						player.getMissile().die();
 					}
@@ -245,7 +247,10 @@ public class Board extends JPanel implements ActionListener {
 		g.setColor(Color.green);
 
 		if (inGame) {
-			g.drawLine(0, 418, 640, 418);
+	//		g.drawLine(0, 418, 640, 418);
+			g.drawLine(0, 30, 640, 30);
+			g.drawString("Score:", 0, 15);
+			g.drawString(Integer.toString(score), 45, 15);
 			drawAliens(g);
 			drawPlayer(g);
 			drawPlayerMissile(g);
