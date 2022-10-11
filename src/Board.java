@@ -264,7 +264,10 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private void endGame(Graphics g) {
+		DatabaseManager d = new DatabaseManager();
 		g.setColor(Color.white);
 		g.drawString(gameEndText, 290, 210);
 	}
+	
+
 }

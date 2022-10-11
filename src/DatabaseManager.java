@@ -15,16 +15,14 @@ public class DatabaseManager {
 		}
 		
 	}
-	public void createDatabase() throws SQLException {
-		
+	public void createDatabase() throws SQLException {		
 		stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS space_invaders_high_scores");
-	//	System.out.println("Created Database");
+
 	}
 	
 	public void createTable() throws SQLException {
 		
 		stmt.executeUpdate("CREATE TABLE IF NOT EXISTS highscores(Position int,Initials VARCHAR(255),Score int)");
-//		System.out.println("Created Table");
 		if(isEmpty()) {
 		
 			reset();
@@ -54,19 +52,24 @@ public class DatabaseManager {
 		preparedStatement.executeUpdate();
 	}
 	
+	public void compare() throws SQLException{
+		ResultSet rs = stmt.executeQuery("SELECT * FROM highscores");
+		while(rs.next()) {
+			
+		}
+	}
+	
 	public Boolean isEmpty() throws SQLException{
 		ResultSet rs = stmt.executeQuery("SELECT * FROM highscores");
 		if(rs.next()) {
 			return false;
 		}
 		else {
-			
 			return true;
 		}
 	
 	}
 	public String getInitials(int position) throws SQLException {
-		System.out.println(position);
 		ResultSet  rs = stmt.executeQuery("SELECT Initials FROM highscores "+"WHERE Position="+position);
 		rs.next();
 		return rs.getString("Initials");
