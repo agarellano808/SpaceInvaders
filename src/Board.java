@@ -7,7 +7,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.Timer;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Board extends JPanel implements ActionListener {
 	private Player player;
@@ -17,26 +20,35 @@ public class Board extends JPanel implements ActionListener {
 	private boolean inGame = true;
 	private String gameEndText = "GAME OVER";
 	private int remainingAliens;
-
+	private Frame frame;
+	private AncestorListener ancestorListener;
+	private int score;
 	public Board() {
 		setBackground(Color.black);
 		setLayout(null);
+		setAncestorListener();
+		setUpGame();
+	}
+
+	private void setUpGame() {
 		player = new Player();
 		addKeyListener(new Controls(player));
-		timer = new Timer(16, this);
-		timer.start();
-		setFocusable(true);
-
 		aliens = new ArrayList<>();
+		score=0;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 6; j++) {
-				Alien alien = new Alien(120 + 60 * j, 15 + 70 * i);
+				Alien alien = new Alien(120 + 60 * j, 30 + 70 * i);
 				aliens.add(alien);
 				remainingAliens++;
 			}
 		}
 	}
-
+	
+	private void startGame() {
+		timer = new Timer(16, this);
+		timer.start();
+		
+	}
 	private void drawAliens(Graphics g) {
 		for (Alien alien : aliens) {
 			if (alien.isVisible()) {
@@ -132,6 +144,7 @@ public class Board extends JPanel implements ActionListener {
 					if (missileX >= (alienX+2) && missileX <= (alienX + alien.getImage().getWidth(null)-2)
 							&& missileY >= (alienY) && missileY <= (alienY + alien.getImage().getHeight(null)-15)) {
 						alien.setDead(true);
+						score=score+100;
 						remainingAliens--;
 						player.getMissile().die();
 					}
@@ -199,11 +212,45 @@ public class Board extends JPanel implements ActionListener {
 		draw(g);
 	}
 
+	private void setAncestor() {
+		frame = (Frame) SwingUtilities.getWindowAncestor(this);
+	}
+
+	private void setAncestorListener() {
+		ancestorListener = new AncestorListener() {
+
+			@Override
+
+			public void ancestorAdded(AncestorEvent ancestorEvent) {
+				setAncestor();
+				startGame();
+				frame.setHgap(0);
+				frame.setVgap(0);
+				frame.setSize(640, 480);
+			}
+
+			@Override
+			// This method is not being used and has been left intentionally blank
+			public void ancestorMoved(AncestorEvent ancestorEvent) {
+			}
+
+			@Override
+			// This method is not being used and has been left intentionally blank
+			public void ancestorRemoved(AncestorEvent ancestorEvent) {
+			}
+
+		};
+		addAncestorListener(ancestorListener);
+	}
+	
 	private void draw(Graphics g) {
 		g.setColor(Color.green);
 
 		if (inGame) {
-			g.drawLine(0, 418, 640, 418);
+	//		g.drawLine(0, 418, 640, 418);
+			g.drawLine(0, 30, 640, 30);
+			g.drawString("Score:", 0, 15);
+			g.drawString(Integer.toString(score), 45, 15);
 			drawAliens(g);
 			drawPlayer(g);
 			drawPlayerMissile(g);
