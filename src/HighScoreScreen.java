@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -88,8 +87,6 @@ public class HighScoreScreen extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	
-		
 		try {
 			
 			draw(g);
@@ -107,7 +104,7 @@ public class HighScoreScreen extends JPanel {
 		g.drawString("PLAYER",300,55);
 		g.drawString("SCORE",355,55);
 		for (int i = 0; i < 10; i++) {
-			g.drawString(Integer.toString(i),265,50+(30 * (i + 1)));
+			g.drawString(Integer.toString(i+1),265,50+(30 * (i + 1)));
 			g.drawString(playerInitials[i], 310, 50 + (30 * (i + 1)));
 			g.drawString(highScores[i], 360, 50 + (30 * (i + 1)));
 
