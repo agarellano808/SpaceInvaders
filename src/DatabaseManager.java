@@ -57,13 +57,12 @@ public class DatabaseManager {
 		preparedStatement.executeUpdate();
 	}
 
-	public int compare(int score) throws SQLException {
+	public int findPosition(int score) throws SQLException {
 		int position = -1;
 		ResultSet rs = stmt.executeQuery("SELECT * FROM highscores");
 		while (rs.next()) {
 			if (score > rs.getInt("Score")) {
 				position = rs.getInt("Position");
-				// System.out.println(position);
 				break;
 			}
 		}
@@ -71,11 +70,9 @@ public class DatabaseManager {
 	}
 
 	public void updateTable(String initials, int score) throws SQLException {
-		int position = compare(score);
-		// System.out.println(position);
+		int position = findPosition(score);
 		if (position >= 0) {
 			for (int i = 10; i > position; i--) {
-				System.out.println(i);
 				update(i, getInitials(i - 1), getScore(i - 1));
 
 			}
