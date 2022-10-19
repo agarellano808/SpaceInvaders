@@ -8,6 +8,7 @@ public class Frame extends JFrame {
 	private CardLayout cl;
 	private HighScoreScreen s;
 	private Board board;
+	private EnterInitialsPanel initialsPanel;
 	public Frame() throws SQLException {
 
 		setTitle("Space Invaders");
@@ -27,11 +28,16 @@ public class Frame extends JFrame {
 		getContentPane().add(board, "2");
 	    s = new HighScoreScreen();
 		getContentPane().add(s, "3");
+		initialsPanel = new EnterInitialsPanel();
+		getContentPane().add(initialsPanel, "4");
 	}
 	public void setFocus() {
 		board.requestFocus(true);
 	}
-
+	
+	public void setScore(int score) {
+		initialsPanel.setScore(score);
+	}
 	public void changePanel(String s) {
 		cl.show(getContentPane(), s);
 	}

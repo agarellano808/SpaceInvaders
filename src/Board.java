@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -17,12 +18,15 @@ public class Board extends JPanel implements ActionListener {
 	private ArrayList<Alien> aliens;
 	private int direction = -1;
 	private Timer timer;
-	private boolean inGame = true;
+	private boolean ingame;
 	private String gameEndText = "GAME OVER";
 	private int remainingAliens;
 	private Frame frame;
 	private AncestorListener ancestorListener;
+	private DatabaseManager d;
 	private int score;
+	private Timer gameOverTimer;
+	
 	public Board() {
 		setBackground(Color.black);
 		setLayout(null);
@@ -30,11 +34,13 @@ public class Board extends JPanel implements ActionListener {
 		setUpGame();
 	}
 
-	private void setUpGame() {
+	public void setUpGame() {
+		d = new DatabaseManager();
+		ingame = true;
 		player = new Player();
 		addKeyListener(new Controls(player));
 		aliens = new ArrayList<>();
-		score=0;
+		score = 0;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 6; j++) {
 				Alien alien = new Alien(120 + 60 * j, 30 + 70 * i);
@@ -43,12 +49,13 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
+
 	private void startGame() {
 		timer = new Timer(16, this);
 		timer.start();
-		
+
 	}
+
 	private void drawAliens(Graphics g) {
 		for (Alien alien : aliens) {
 			if (alien.isVisible()) {
@@ -67,7 +74,7 @@ public class Board extends JPanel implements ActionListener {
 
 		if (player.isDead()) {
 			player.die();
-			inGame = false;
+			ingame = false;
 		}
 	}
 
@@ -88,7 +95,7 @@ public class Board extends JPanel implements ActionListener {
 
 	private void update() {
 		if (remainingAliens == 0) {
-			inGame = false;
+			ingame = false;
 			timer.stop();
 			gameEndText = "YOU WIN!";
 		}
@@ -125,7 +132,7 @@ public class Board extends JPanel implements ActionListener {
 				int y = alien.getY();
 
 				if (y > 290 - 12) {
-					inGame = false;
+					ingame = false;
 				}
 				alien.move(direction);
 			}
@@ -141,10 +148,10 @@ public class Board extends JPanel implements ActionListener {
 
 				if (alien.isVisible() && player.getMissile().isVisible()) {
 
-					if (missileX >= (alienX+2) && missileX <= (alienX + alien.getImage().getWidth(null)-2)
-							&& missileY >= (alienY) && missileY <= (alienY + alien.getImage().getHeight(null)-15)) {
+					if (missileX >= (alienX + 2) && missileX <= (alienX + alien.getImage().getWidth(null) - 2)
+							&& missileY >= (alienY) && missileY <= (alienY + alien.getImage().getHeight(null) - 15)) {
 						alien.setDead(true);
-						score=score+100;
+						score = score + 100;
 						remainingAliens--;
 						player.getMissile().die();
 					}
@@ -209,7 +216,12 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		draw(g);
+		try {
+			draw(g);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void setAncestor() {
@@ -235,19 +247,19 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			@Override
-			// This method is not being used and has been left intentionally blank
+
 			public void ancestorRemoved(AncestorEvent ancestorEvent) {
+				setUpGame();
 			}
 
 		};
 		addAncestorListener(ancestorListener);
 	}
-	
-	private void draw(Graphics g) {
+
+	private void draw(Graphics g) throws SQLException {
 		g.setColor(Color.green);
 
-		if (inGame) {
-	//		g.drawLine(0, 418, 640, 418);
+		if (ingame) {
 			g.drawLine(0, 30, 640, 30);
 			g.drawString("Score:", 0, 15);
 			g.drawString(Integer.toString(score), 45, 15);
@@ -260,14 +272,61 @@ public class Board extends JPanel implements ActionListener {
 				timer.stop();
 			}
 			endGame(g);
-		}
+		} 
 	}
 
-	private void endGame(Graphics g) {
-		DatabaseManager d = new DatabaseManager();
+	private void endGame(Graphics g) throws SQLException {
+
 		g.setColor(Color.white);
 		g.drawString(gameEndText, 290, 210);
+
+		ActionListener action = new ActionListener() {
+			int i = 5;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+			
+				// TODO Auto-generated method stub
+				if (i == 0) {
+					gameOverTimer.stop();
+					try {
+						if (score > d.getScore(10)) {
+							goToEnterInitialsScreen();
+							//repaint();
+						} else {
+							goBack();
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					i--;
+				}
+			}
+
+		};
+		gameOverTimer = new Timer(500, action);
+		gameOverTimer.start();
+		// d.updateTable("AAA",score);
+
 	}
+
+	private void goToEnterInitialsScreen() {
+		frame.setScore(score);
+		frame.changePanel("4");
+		frame.setHgap(100);
+		frame.setVgap(160);
+		frame.pack();
 	
+	}
+
+	private void goBack() {
+
+		frame.changePanel("1");
+		frame.setHgap(100);
+		frame.setVgap(160);
+		frame.pack();
+	}
 
 }
