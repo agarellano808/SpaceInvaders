@@ -18,6 +18,7 @@ public class HighScoreScreen extends JPanel {
 	private String highScores[];
 	private Frame frame;
 	private AncestorListener ancestorListener;
+	private Boolean intializedScore = false;
 
 	public HighScoreScreen() throws SQLException {
 		setLayout(new BorderLayout());
@@ -25,7 +26,7 @@ public class HighScoreScreen extends JPanel {
 		addButtonActionListeners();
 		setAncestorListener();
 		d =new DatabaseManager();
-		initalizeHighScores();
+		
 	}
 
 	public void addButtons() {
@@ -65,9 +66,16 @@ public class HighScoreScreen extends JPanel {
 
 			public void ancestorAdded(AncestorEvent ancestorEvent) {
 				setAncestor();
+				try {
+					initalizeHighScores();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				frame.setHgap(0);
 				frame.setVgap(0);
 				frame.setSize(640, 480);
+				intializedScore=true;
 			}
 
 			@Override
@@ -78,6 +86,7 @@ public class HighScoreScreen extends JPanel {
 			@Override
 			// This method is not being used and has been left intentionally blank
 			public void ancestorRemoved(AncestorEvent ancestorEvent) {
+				intializedScore=false;
 			}
 
 		};
@@ -103,11 +112,13 @@ public class HighScoreScreen extends JPanel {
 		g.drawString("RANK",255,55);
 		g.drawString("PLAYER",300,55);
 		g.drawString("SCORE",355,55);
+		if(intializedScore) {
 		for (int i = 0; i < 10; i++) {
 			g.drawString(Integer.toString(i+1),265,50+(30 * (i + 1)));
 			g.drawString(playerInitials[i], 310, 50 + (30 * (i + 1)));
 			g.drawString(highScores[i], 360, 50 + (30 * (i + 1)));
 
+		}
 		}
 	}
 
